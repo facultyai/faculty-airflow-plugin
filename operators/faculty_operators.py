@@ -26,15 +26,21 @@ class FacultyJobRunNowOperator(BaseOperator):
     def __init__(
         self,
         job_id,
-        job_parameter_values={},
+        job_parameter_values=None,
         polling_period_seconds=30,
         project_id=None,
         **kwargs,
     ):
         super(FacultyJobRunNowOperator, self).__init__(**kwargs)
         self.job_id = job_id
-        self.job_parameter_values = job_parameter_values
+
+        if job_parameter_values is not None:
+            self.job_parameter_values = job_parameter_values
+        else:
+            self.job_parameter_values = {}
+
         self.polling_period_seconds = polling_period_seconds
+
         if project_id is not None:
             self.project_id = project_id
         else:
