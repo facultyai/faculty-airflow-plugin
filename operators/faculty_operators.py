@@ -31,7 +31,7 @@ class FacultyJobRunNowOperator(BaseOperator):
         project_id=None,
         **kwargs,
     ):
-        super(FacultyJobRunNowOperator, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.job_id = job_id
         self.job_parameter_values = job_parameter_values
         self.polling_period_seconds = polling_period_seconds
