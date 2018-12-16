@@ -73,7 +73,7 @@ class FacultyJobRunNowOperator(BaseOperator):
             if self.__is_terminal_run(run_state):
                 if run_state == RunState.COMPLETED:
                     log.info(f"Job {job_id} and run {run_id} completed successfully.")
-                    return
+                    break
                 else:
                     raise AirflowException(
                         f"Job {job_id} and run {run_id} failed with terminal state: {run_state}"
