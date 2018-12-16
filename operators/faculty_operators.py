@@ -57,7 +57,7 @@ class FacultyJobRunNowOperator(BaseOperator):
         job_id = self.job_id
         job_parameter_values = self.job_parameter_values
 
-        # Trigger job with the submission id
+        # Trigger job run parameters
         job_client = sherlockml.client("job")
         log.info(
             f"Creating a job run for job {job_id} parameters {job_parameter_values}."
