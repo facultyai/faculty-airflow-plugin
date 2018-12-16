@@ -87,4 +87,5 @@ class FacultyJobRunNowOperator(BaseOperator):
         """
         Cancels the job run on Faculty
         """
-        print("TODO - use job client to cancel the faculty job run")
+        # TODO: Use the Faculty job client to cancel the run.
+        raise NotImplementedError
