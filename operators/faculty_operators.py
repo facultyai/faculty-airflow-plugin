@@ -26,27 +26,33 @@ class FacultyJobRunNowOperator(BaseOperator):
     def __init__(
         self,
         job_id,
-        job_parameter_values={},
+        job_parameter_values=None,
         polling_period_seconds=30,
         project_id=None,
         **kwargs,
     ):
-        super(FacultyJobRunNowOperator, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.job_id = job_id
-        self.job_parameter_values = job_parameter_values
+
+        if job_parameter_values is not None:
+            self.job_parameter_values = job_parameter_values
+        else:
+            self.job_parameter_values = {}
+
         self.polling_period_seconds = polling_period_seconds
+
         if project_id is not None:
             self.project_id = project_id
         else:
             self.project_id = os.environ["FACULTY_PROJECT_ID"]
 
     def __is_terminal_run(self, run_state):
-        return (
-            run_state == RunState.COMPLETED
-            or run_state == RunState.FAILED
-            or run_state == RunState.CANCELLED
-            or run_state == RunState.ERROR
-        )
+        return run_state in {
+            RunState.COMPLETED,
+            RunState.FAILED,
+            RunState.CANCELLED,
+            RunState.ERROR,
+        }
 
     def execute(self, context):
         """
@@ -62,7 +68,9 @@ class FacultyJobRunNowOperator(BaseOperator):
         log.info(
             f"Creating a job run for job {job_id} parameters {job_parameter_values}."
         )
-        run_id = job_client.create_run(project_id, job_id, [job_parameter_values])
+        run_id = job_client.create_run(
+            project_id, job_id, [job_parameter_values]
+        )
         log.info(
             f"Triggered job {job_id} with run id {run_id} and parameters {job_parameter_values}."
         )
@@ -72,19 +80,27 @@ class FacultyJobRunNowOperator(BaseOperator):
             run_state = run_info.state
             if self.__is_terminal_run(run_state):
                 if run_state == RunState.COMPLETED:
-                    log.info(f"Job {job_id} and run {run_id} completed successfully.")
+                    log.info(
+                        f"Job {job_id} and run {run_id} completed successfully."
+                    )
                     break
+
                 else:
                     raise AirflowException(
                         f"Job {job_id} and run {run_id} failed with terminal state: {run_state}"
                     )
             else:
-                log.info(f"Job {job_id} and run {run_id} in run state: {run_state}")
-                log.info(f"Sleeping for {self.polling_period_seconds} seconds.")
+                log.info(
+                    f"Job {job_id} and run {run_id} in run state: {run_state}"
+                )
+                log.info(
+                    f"Sleeping for {self.polling_period_seconds} seconds."
+                )
                 time.sleep(self.polling_period_seconds)
 
     def on_kill(self):
         """
         Cancels the job run on Faculty
         """
-        print("TODO - use job client to cancel the faculty job run")
+        # TODO: Use the Faculty job client to cancel the run.
+        raise NotImplementedError
