@@ -7,6 +7,13 @@ from airflow.models import BaseOperator
 import sherlockml
 from sherlockml.clients.job import RunState
 
+COMPLETED_RUN_STATES = {
+    RunState.COMPLETED,
+    RunState.FAILED,
+    RunState.CANCELLED,
+    RunState.ERROR,
+}
+
 
 class FacultyJobRunNowOperator(BaseOperator):
     """
@@ -16,7 +23,7 @@ class FacultyJobRunNowOperator(BaseOperator):
     :type job_parameter_values          dict
     :param polling_period_seconds       The time to wait between polling to get the job run status
     :type polling_period_seconds        int
-    :param project_id                   The project id for the job. 
+    :param project_id                   The project id for the job.
     :type project_id                    string
     """
 
@@ -46,17 +53,10 @@ class FacultyJobRunNowOperator(BaseOperator):
         else:
             self.project_id = os.environ["FACULTY_PROJECT_ID"]
 
-    def _is_terminal_run(self, run_state):
-        return run_state in {
-            RunState.COMPLETED,
-            RunState.FAILED,
-            RunState.CANCELLED,
-            RunState.ERROR,
-        }
-
     def execute(self, context):
         """
-        Triggers a run of a Faculty job based on the job id and parameters passed in
+        Triggers a run of a Faculty job based on the job id and parameters
+        passed in
         """
         log = self.log
         project_id = self.project_id
@@ -78,7 +78,7 @@ class FacultyJobRunNowOperator(BaseOperator):
         while True:
             run_info = job_client.get_run(project_id, job_id, run_id)
             run_state = run_info.state
-            if self._is_terminal_run(run_state):
+            if run_state in COMPLETED_RUN_STATES:
                 if run_state == RunState.COMPLETED:
                     log.info(
                         f"Job {job_id} and run {run_id} completed successfully."
