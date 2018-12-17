@@ -31,7 +31,7 @@ class FacultyJobRunNowOperator(BaseOperator):
         project_id=None,
         **kwargs,
     ):
-        super(FacultyJobRunNowOperator, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.job_id = job_id
 
         if job_parameter_values is not None:
