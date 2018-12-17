@@ -47,12 +47,12 @@ class FacultyJobRunNowOperator(BaseOperator):
             self.project_id = os.environ["FACULTY_PROJECT_ID"]
 
     def __is_terminal_run(self, run_state):
-        return (
-            run_state == RunState.COMPLETED
-            or run_state == RunState.FAILED
-            or run_state == RunState.CANCELLED
-            or run_state == RunState.ERROR
-        )
+        return run_state in {
+            RunState.COMPLETED,
+            RunState.FAILED,
+            RunState.CANCELLED,
+            RunState.ERROR,
+        }
 
     def execute(self, context):
         """
