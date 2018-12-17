@@ -68,7 +68,9 @@ class FacultyJobRunNowOperator(BaseOperator):
         log.info(
             f"Creating a job run for job {job_id} parameters {job_parameter_values}."
         )
-        run_id = job_client.create_run(project_id, job_id, [job_parameter_values])
+        run_id = job_client.create_run(
+            project_id, job_id, [job_parameter_values]
+        )
         log.info(
             f"Triggered job {job_id} with run id {run_id} and parameters {job_parameter_values}."
         )
@@ -78,15 +80,21 @@ class FacultyJobRunNowOperator(BaseOperator):
             run_state = run_info.state
             if self.__is_terminal_run(run_state):
                 if run_state == RunState.COMPLETED:
-                    log.info(f"Job {job_id} and run {run_id} completed successfully.")
+                    log.info(
+                        f"Job {job_id} and run {run_id} completed successfully."
+                    )
                     return
                 else:
                     raise AirflowException(
                         f"Job {job_id} and run {run_id} failed with terminal state: {run_state}"
                     )
             else:
-                log.info(f"Job {job_id} and run {run_id} in run state: {run_state}")
-                log.info(f"Sleeping for {self.polling_period_seconds} seconds.")
+                log.info(
+                    f"Job {job_id} and run {run_id} in run state: {run_state}"
+                )
+                log.info(
+                    f"Sleeping for {self.polling_period_seconds} seconds."
+                )
                 time.sleep(self.polling_period_seconds)
 
     def on_kill(self):
