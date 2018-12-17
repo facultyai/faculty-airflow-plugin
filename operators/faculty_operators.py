@@ -83,7 +83,8 @@ class FacultyJobRunNowOperator(BaseOperator):
                     log.info(
                         f"Job {job_id} and run {run_id} completed successfully."
                     )
-                    return
+                    break
+
                 else:
                     raise AirflowException(
                         f"Job {job_id} and run {run_id} failed with terminal state: {run_state}"
