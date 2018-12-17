@@ -46,7 +46,7 @@ class FacultyJobRunNowOperator(BaseOperator):
         else:
             self.project_id = os.environ["FACULTY_PROJECT_ID"]
 
-    def __is_terminal_run(self, run_state):
+    def _is_terminal_run(self, run_state):
         return run_state in {
             RunState.COMPLETED,
             RunState.FAILED,
@@ -78,7 +78,7 @@ class FacultyJobRunNowOperator(BaseOperator):
         while True:
             run_info = job_client.get_run(project_id, job_id, run_id)
             run_state = run_info.state
-            if self.__is_terminal_run(run_state):
+            if self._is_terminal_run(run_state):
                 if run_state == RunState.COMPLETED:
                     log.info(
                         f"Job {job_id} and run {run_id} completed successfully."
