@@ -4,8 +4,8 @@ import time
 from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator
 
-import sherlockml
-from sherlockml.clients.job import RunState
+import faculty
+from faculty.clients.job import RunState
 
 COMPLETED_RUN_STATES = {
     RunState.COMPLETED,
@@ -64,7 +64,7 @@ class FacultyJobRunNowOperator(BaseOperator):
         job_parameter_values = self.job_parameter_values
 
         # Trigger job run parameters
-        job_client = sherlockml.client("job")
+        job_client = faculty.client("job")
         log.info(
             f"Creating a job run for job {job_id} parameters {job_parameter_values}."
         )
