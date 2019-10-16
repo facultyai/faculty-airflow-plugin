@@ -1,6 +1,6 @@
 # Airflow Faculty Plugin
 
-The *Faculty Airflow Plugin* lets you interact with Faculty services
+The *Airflow Faculty Plugin* lets you interact with Faculty services
 from [Apache Airflow](https://airflow.apache.org/). Currently, the
 only supported mode of interaction is triggering jobs.
 
