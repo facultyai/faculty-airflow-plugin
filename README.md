@@ -3,8 +3,29 @@
 ## Operators
 
 ### FacultyJobRunNowOperator
-This operator triggers a Faculty job run and waits for an end event for the job run (such as COMPLETED or ERROR).
-It accepts the following parameters:
+
+This operator triggers a Faculty job run and waits for an end event
+for the job run (such as COMPLETED or ERROR).
+
+Use this operator in your DAG as follows:
+
+```py
+from airflow import DAG
+
+from airflow.operators.faculty import FacultyJobRunNowOperator
+
+dag = DAG("faculty_job_tutorial")
+
+run_job = FacultyJobRunNowOperator(
+    job_id="260938d9-1ed8-47eb-aaf2-a0f9d8830e3a",
+    project_id="e88728f6-c197-4f01-bdf2-df3fc92bfe4d",
+    polling_period_seconds=10,
+    task_id="trigger_job",
+    dag=dag
+)
+```
+
+The operator accepts the following parameters:
 
 ```
     :param job_id                       The Faculty job id
