@@ -16,15 +16,24 @@ COMPLETED_RUN_STATES = {
 
 
 class FacultyJobRunNowOperator(BaseOperator):
-    """
-    :param job_id                       The Faculty job id
-    :type job_id                        string
-    :param job_parameter_values         The parameters to be passed into the job run
-    :type job_parameter_values          dict
-    :param polling_period_seconds       The time to wait between polling to get the job run status
-    :type polling_period_seconds        int
-    :param project_id                   The project id for the job.
-    :type project_id                    string
+    """ Run a Faculty job and wait for it to finish
+
+    Parameters
+    ----------
+    job_id : str
+        ID of the job to trigger
+    project_id : str
+        Project ID of the job to trigger
+    polling_period_seconds : int, optional
+        The number of seconds between checks for whether the job has
+        completed. Use a low number if you expect the job to finish
+        quickly, and a high number if the job is longer.
+    job_parameter_values : dict
+        Dictionary mapping parameter names to the values they should take
+    task_id : str
+        Identifier for the Airflow task triggered by this job
+    dag : DAG
+        Reference to the DAG that owns this task.
     """
 
     ui_color = "#00aef9"
