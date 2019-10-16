@@ -27,7 +27,8 @@ class FacultyJobRunNowOperator(BaseOperator):
     polling_period_seconds : int, optional
         The number of seconds between checks for whether the job has
         completed. Use a low number if you expect the job to finish
-        quickly, and a high number if the job is longer.
+        quickly, and a high number if the job is longer. Defaults to
+        30s.
     job_parameter_values : dict
         Dictionary mapping parameter names to the values they should take
     task_id : str
