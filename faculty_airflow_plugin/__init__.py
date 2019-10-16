@@ -1,6 +1,6 @@
 from airflow.plugins_manager import AirflowPlugin
 
-from operators.faculty_operators import FacultyJobRunNowOperator
+from .operators import FacultyJobRunNowOperator
 
 
 class FacultyPlugin(AirflowPlugin):
