@@ -1,5 +1,22 @@
 # Airflow Faculty Plugin
 
+The *Faculty Airflow Plugin* lets you interact with Faculty services
+from [Apache Airflow](https://airflow.apache.org/). Currently, the
+only supported mode of interaction is triggering jobs.
+
+## Installation
+
+You can install this plugin from PyPI into the Python environment that
+executes the DAG:
+
+```
+pip install airflow-faculty-plugin
+```
+
+To interact with platform resources, you will need to pass in
+credentials. Generate CLI credentials and save them in
+``~/.config/faculty/credentials`` on the driver.
+
 ## Operators
 
 ### FacultyJobRunNowOperator
