@@ -44,13 +44,16 @@ run_job = FacultyJobRunNowOperator(
 
 The operator accepts the following parameters:
 
-```
-    :param job_id                       The Faculty job id
-    :type job_id                        string
-    :param job_parameter_values         The parameters to be passed into the job run
-    :type job_parameter_values          dict
-    :param polling_period_seconds       The time to wait between polling to get the job run status
-    :type polling_period_seconds        int
-    :param project_id                   The project id for the job. 
-    :type project_id                    string
-```
+- `job_id`: the ID of the job to trigger. To find the ID, run
+   `faculty job list -v` in the project that this job is in.
+- `project_id`: the ID of the job to trigger. To find the ID,
+   run `echo $FACULTY_PROJECT_ID` in the terminal of a server
+   in this project.
+- `polling_period_seconds`: The number of seconds between checks for
+   whether the job has completed. Use a low number if you expect
+   the job to finish quickly, and a high number if the job is
+   longer. Defaults to 30s.
+- `job_parameter_values`: a dictionary mapping parameter names
+   to the values they should take in this run. For instance,
+   if the job requires the parameter `NUMBER_ESTIMATORS`, pass in:
+   `{"NUMBER_ESTIMATORS": "50"}`
