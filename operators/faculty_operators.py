@@ -3,9 +3,11 @@ import time
 
 from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator
+from airflow.plugins_manager import AirflowPlugin
 
 import faculty
 from faculty.clients.job import RunState
+
 
 COMPLETED_RUN_STATES = {
     RunState.COMPLETED,
@@ -104,3 +106,8 @@ class FacultyJobRunNowOperator(BaseOperator):
         """
         # TODO: Use the Faculty job client to cancel the run.
         raise NotImplementedError
+
+
+class FacultyPlugin(AirflowPlugin):
+    name = "faculty"
+    operators = [FacultyJobRunNowOperator]
