@@ -6,7 +6,7 @@ only supported mode of interaction is triggering jobs.
 
 ## Installation
 
-You can install this plugin from Pypi into the Python environment that
+You can install this plugin from PyPI into the Python environment that
 executes the DAG:
 
 ```
