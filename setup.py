@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="faculty-airflow-plugin",
+    name="airflow-faculty-plugin",
     description="Airflow plugin for interacting with the Faculty platform",
     url="https://faculty.ai/products-services/platform/",
     author="Faculty",
@@ -14,7 +14,7 @@ setup(
     install_requires=["faculty"],
     entry_points={
         'airflow.plugins': [
-            'unused = faculty_airflow_plugin:FacultyPlugin'
+            'unused = airflow_faculty_plugin:FacultyPlugin'
         ]
     }
 )

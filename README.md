@@ -1,4 +1,4 @@
-# Faculty Airflow Plugin
+# Airflow Faculty Plugin
 
 ## Operators
 
