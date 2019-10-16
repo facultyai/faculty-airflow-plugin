@@ -6,22 +6,16 @@ only supported mode of interaction is triggering jobs.
 
 ## Installation
 
-### Vanilla airflow
-
 You can install this plugin from Pypi into the Python environment that
 executes the DAG:
 
 ```
-pip install faculty-airflow-plugin
+pip install airflow-faculty-plugin
 ```
 
 To interact with platform resources, you will need to pass in
-credentials. 
-
-### Google Cloud Composer
-
-To install this plugin on
-[Composer](https://cloud.google.com/composer/docs/quickstart), ???
+credentials. Generate CLI credentials and save them in
+``~/.config/faculty/credentials`` on the driver.
 
 ## Operators
 
