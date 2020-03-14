@@ -73,8 +73,6 @@ class JobClient(BaseClient):
         uuid.UUID
             The ID of the created run.
         """
-        print("starting...!!")
-
         if parameter_value_sets is None:
             parameter_value_sets = [{}]
 
@@ -88,9 +86,7 @@ class JobClient(BaseClient):
                 for parameter_values in parameter_value_sets
             ]
         }
-        print(payload)
         response = self._post_raw(endpoint, json=payload)
-        print(response)
         return uuid.UUID(response.json()["runId"])
 
     def get_run_state(self, project_id, job_id, run_identifier):

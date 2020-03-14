@@ -112,9 +112,7 @@ class BaseClient(object):
 
     def _request(self, method, endpoint, check_status=True, *args, **kwargs):
         url = self.session.service_url(self.SERVICE_NAME, endpoint)
-        print(url)
         response = self.http_session.request(method, url, *args, **kwargs)
-        print(response)
         if check_status:
             _check_status(response)
         return response

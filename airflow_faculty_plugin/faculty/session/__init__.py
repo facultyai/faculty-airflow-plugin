@@ -30,9 +30,7 @@ def _service_url(profile, service, endpoint=""):
 
 
 def _get_access_token(profile):
-    print("getting access token")
     url = _service_url(profile, "hudson", "access_token")
-    print(url)
     payload = {
         "client_id": profile.client_id,
         "client_secret": profile.client_secret,
@@ -40,7 +38,6 @@ def _get_access_token(profile):
     }
 
     response = requests.post(url, json=payload)
-    print(response)
     response.raise_for_status()
 
     body = response.json()
