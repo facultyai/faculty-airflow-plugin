@@ -105,7 +105,7 @@ class FacultyJobRunNowOperator(BaseOperator):
             else:
                 log.info(
                     f"Run {run_id} in state: {run_state}. "
-                    f"Sleeping for {self.polling_period_seconds}."
+                    f"Sleeping for {self.polling_period_seconds}s."
                 )
                 time.sleep(self.polling_period_seconds)
 
