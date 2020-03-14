@@ -13,9 +13,7 @@ executes the DAG:
 pip install airflow-faculty-plugin
 ```
 
-To interact with platform resources, you will need to pass in
-credentials. Generate CLI credentials and save them in
-``~/.config/faculty/credentials`` on the driver.
+![](images/demo.png)
 
 ## Operators
 
@@ -57,3 +55,52 @@ The operator accepts the following parameters:
    to the values they should take in this run. For instance,
    if the job requires the parameter `NUMBER_ESTIMATORS`, pass in:
    `{"NUMBER_ESTIMATORS": "50"}`
+- `client_configuration`: customise how to connect and authenticate
+   with the Faculty API.
+
+### Authenticating with Faculty
+
+To authenticate with Faculty, users can either:
+
+- pass connection parameters via the file
+  `~/.config/faculty/credentials` or the environment variables
+  `FACULTY_CLIENT_ID`, `FACULTY_CLIENT_SECRET` and
+  `FACULTY_SERVICES_DOMAIN`. These are read automatically.
+- pass parameters to each task. This works well when integrated with
+  Airflow
+  [variables](https://airflow.apache.org/docs/stable/concepts.html#variables).
+  For instance, define the `faculty_client_id` and
+  `faculty_client_secret` variables via the Airflow console:
+
+![](images/airflow-variables.png}
+
+These variables can then be retrieved at runtime and passed to the task definition:
+
+``` py
+from airflow import DAG
+
+from airflow.operators.faculty import FacultyJobRunNowOperator
+from airflow.models import Variable
+from datetime import datetime
+
+run_job = FacultyJobRunNowOperator(
+    job_id="4ae38631-eb41-4001-a5ce-527a43a7d7ce",
+    project_id="f3100098-fbdf-4aff-80b8-abbb03181354",
+    polling_period_seconds=10,
+    task_id="trigger_job",
+    start_date=datetime(2015, 1, 1),
+    client_configuration={
+        "client_id": Variable.get("faculty_client_id"),
+        "client_secret": Variable.get("faculty_client_secret"),
+        "domain": "services.cloud.my.faculty.ai",
+    },
+    dag=dag
+)
+```
+
+Here, `domain` should be `services.URL`, where `URL` is the base URL
+of your Faculty deployment.
+
+Thus, for instance, if the URL of your Faculty deployment is
+`cloud.my.faculty.ai`, the value of `domain` should be
+`services.cloud.my.faculty.ai`.
