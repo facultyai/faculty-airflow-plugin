@@ -92,9 +92,7 @@ class FacultyJobRunNowOperator(BaseOperator):
             run_state = job_client.get_run_state(project_id, job_id, run_id)
             if run_state in COMPLETED_RUN_STATES:
                 if run_state == RunState.COMPLETED:
-                    log.info(
-                        f"Run {run_id} completed successfully."
-                    )
+                    log.info(f"Run {run_id} completed successfully.")
                     break
 
                 else:

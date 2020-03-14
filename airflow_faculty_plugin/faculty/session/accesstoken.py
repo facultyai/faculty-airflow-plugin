@@ -53,7 +53,6 @@ def _is_valid_access_token(access_token_or_none):
         return access_token_or_none.expires_at >= datetime.now(tz=pytz.utc)
 
 
-
 class AccessTokenMemoryCache(object):
     def __init__(self):
         self._store = AccessTokenStore()
