@@ -26,6 +26,7 @@ Use this operator in your DAG as follows:
 
 ```py
 from airflow import DAG
+from airflow.utils.dates import days_ago
 
 from airflow.operators.faculty import FacultyJobRunNowOperator
 
@@ -36,6 +37,7 @@ run_job = FacultyJobRunNowOperator(
     project_id="e88728f6-c197-4f01-bdf2-df3fc92bfe4d",
     polling_period_seconds=10,
     task_id="trigger_job",
+    start_date=days_ago(7),
     dag=dag
 )
 ```
@@ -96,14 +98,14 @@ from airflow import DAG
 
 from airflow.operators.faculty import FacultyJobRunNowOperator
 from airflow.models import Variable
-from datetime import datetime
+from airflow.utils.dates import days_ago
 
 run_job = FacultyJobRunNowOperator(
     job_id="4ae38631-eb41-4001-a5ce-527a43a7d7ce",
     project_id="f3100098-fbdf-4aff-80b8-abbb03181354",
     polling_period_seconds=10,
     task_id="trigger_job",
-    start_date=datetime(2015, 1, 1),
+    start_date=days_ago(7),
     client_configuration={
         "client_id": Variable.get("faculty_client_id"),
         "client_secret": Variable.get("faculty_client_secret"),
