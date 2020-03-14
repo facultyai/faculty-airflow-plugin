@@ -60,21 +60,36 @@ The operator accepts the following parameters:
 
 ### Authenticating with Faculty
 
-To authenticate with Faculty, users can either:
+To connect to Faculty, you must specify both a user to connect as, as
+well as the deployment to connect to.  There are two ways to do this.
 
-- pass connection parameters via the file
-  `~/.config/faculty/credentials` or the environment variables
-  `FACULTY_CLIENT_ID`, `FACULTY_CLIENT_SECRET` and
-  `FACULTY_SERVICES_DOMAIN`. These are read automatically.
-- pass parameters to each task. This works well when integrated with
-  Airflow
-  [variables](https://airflow.apache.org/docs/stable/concepts.html#variables).
-  For instance, define the `faculty_client_id` and
-  `faculty_client_secret` variables via the Airflow console:
+#### Authenticating via the environment
+
+The simplest method of authenticating with the Faculty API is to
+follow the documentation on [initialising
+Faculty](https://docs.faculty.ai/user-guide/command_line_interface.html#initialising-faculty)
+.
+
+This works well in development mode, or when a single user is using
+Airflow. It implies that all the tasks will be run as a single Faculty
+Platform user.
+
+#### Passing authentication directly to the task
+
+Alternatively, connection parameters can be passed to each task
+directly. This works well when integrated with Airflow
+[variables](https://airflow.apache.org/docs/stable/concepts.html#variables).
+
+First, retrieve a client ID and secret for your user by following
+[these
+instructions](https://docs.faculty.ai/user-guide/my-account.html#cli-credentials). Then,
+define the `faculty_client_id` and `faculty_client_secret` variables
+via the Airflow console:
 
 ![](images/airflow-variables.png}
 
-These variables can then be retrieved at runtime and passed to the task definition:
+These variables can then be retrieved at runtime and passed to the
+task definition:
 
 ``` py
 from airflow import DAG
