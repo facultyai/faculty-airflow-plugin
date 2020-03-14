@@ -4,8 +4,9 @@ import time
 from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator
 
-import faculty
-from faculty.clients.job import RunState
+from ..faculty import client
+from ..faculty.clients.job import RunState
+
 
 COMPLETED_RUN_STATES = {
     RunState.COMPLETED,
@@ -74,30 +75,32 @@ class FacultyJobRunNowOperator(BaseOperator):
         job_parameter_values = self.job_parameter_values
 
         # Trigger job run parameters
-        job_client = faculty.client("job")
+        job_client = client("job")
         log.info(
-            f"Creating a job run for job {job_id} parameters {job_parameter_values}."
+            f"Creating a job run for job {job_id} in project {project_id} "
+            f"with parameters {job_parameter_values}."
         )
         run_id = job_client.create_run(
             project_id, job_id, [job_parameter_values]
         )
         log.info(
-            f"Triggered job {job_id} with run id {run_id} and parameters {job_parameter_values}."
+            f"Triggered job {job_id} with run ID "
+            f"{run_id} and parameters {job_parameter_values}."
         )
 
         while True:
-            run_info = job_client.get_run(project_id, job_id, run_id)
-            run_state = run_info.state
+            run_state = job_client.get_run_state(project_id, job_id, run_id)
             if run_state in COMPLETED_RUN_STATES:
                 if run_state == RunState.COMPLETED:
                     log.info(
-                        f"Job {job_id} and run {run_id} completed successfully."
+                        f"Run {run_id} completed successfully."
                     )
                     break
 
                 else:
                     raise AirflowException(
-                        f"Job {job_id} and run {run_id} failed with terminal state: {run_state}"
+                        f"Job {job_id} and run {run_id} failed "
+                        f"with terminal state: {run_state}."
                     )
             else:
                 log.info(
