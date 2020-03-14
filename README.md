@@ -86,7 +86,7 @@ instructions](https://docs.faculty.ai/user-guide/my-account.html#cli-credentials
 define the `faculty_client_id` and `faculty_client_secret` variables
 via the Airflow console:
 
-![](images/airflow-variables.png}
+![](images/airflow-variables.png)
 
 These variables can then be retrieved at runtime and passed to the
 task definition:
