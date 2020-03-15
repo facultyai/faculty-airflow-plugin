@@ -71,9 +71,9 @@ class FacultyJobRunNowOperator(BaseOperator):
             self.project_id = os.environ["FACULTY_PROJECT_ID"]
 
         if client_configuration is not None:
-            self.client_kwargs = client_configuration
+            self.client_configuration = client_configuration
         else:
-            self.client_kwargs = {}
+            self.client_configuration = {}
 
     def execute(self, context):
         """
