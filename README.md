@@ -19,7 +19,7 @@ To install this plugin on [Google Cloud
 Composer](https://cloud.google.com/composer/docs), go to the *PyPI
 packages tab* in the Composer environment details page and enter the
 package name. You do *not* need to add the package to the `plugins/`
-folder in the cloud storage bucket.
+folder in the cloud storage bucket of the composer environment.
 
 ![](images/composer-install.png)
 
