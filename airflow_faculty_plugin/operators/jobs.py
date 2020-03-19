@@ -34,7 +34,7 @@ class FacultyJobRunNowOperator(BaseOperator):
         Dictionary mapping parameter names to the values they should take
     task_id : str
         Identifier for the Airflow task triggered by this job
-    client_configuration: dict, optional
+    client_configuration : dict, optional
         The configuration with which to connect to the Faculty API.
         Use this to customise how to connect to Faculty. Refer to the
         docstring for the `client` method for a full description of parameters:
