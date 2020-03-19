@@ -30,10 +30,15 @@ class FacultyJobRunNowOperator(BaseOperator):
         completed. Use a low number if you expect the job to finish
         quickly, and a high number if the job is longer. Defaults to
         30s.
-    job_parameter_values : dict
+    job_parameter_values : dict, optional
         Dictionary mapping parameter names to the values they should take
     task_id : str
         Identifier for the Airflow task triggered by this job
+    client_configuration : dict, optional
+        The configuration with which to connect to the Faculty API.
+        Use this to customise how to connect to Faculty. Refer to the
+        docstring for the `client` method for a full description of parameters:
+        https://github.com/facultyai/faculty/blob/master/faculty/__init__.py
     dag : DAG
         Reference to the DAG that owns this task.
     """
@@ -47,6 +52,7 @@ class FacultyJobRunNowOperator(BaseOperator):
         job_parameter_values=None,
         polling_period_seconds=30,
         project_id=None,
+        client_configuration=None,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -64,6 +70,11 @@ class FacultyJobRunNowOperator(BaseOperator):
         else:
             self.project_id = os.environ["FACULTY_PROJECT_ID"]
 
+        if client_configuration is not None:
+            self.client_configuration = client_configuration
+        else:
+            self.client_configuration = {}
+
     def execute(self, context):
         """
         Triggers a run of a Faculty job based on the job id and parameters
@@ -75,7 +86,11 @@ class FacultyJobRunNowOperator(BaseOperator):
         job_parameter_values = self.job_parameter_values
 
         # Trigger job run parameters
-        job_client = client("job")
+        job_client = client("job", **self.client_configuration)
+        log.info(
+            "Jobs client is looking for service at URL "
+            f"{job_client.session.service_url(job_client.SERVICE_NAME)}."
+        )
         log.info(
             f"Creating a job run for job {job_id} in project {project_id} "
             f"with parameters {job_parameter_values}."
