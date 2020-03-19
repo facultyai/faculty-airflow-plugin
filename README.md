@@ -15,6 +15,14 @@ pip install airflow-faculty-plugin
 
 ![](images/demo.png)
 
+To install this plugin on [Google Cloud
+Composer](https://cloud.google.com/composer/docs), go to the *PyPI
+packages tab* in the Composer environment details page and enter the
+package name. You do *not* need to add the package to the `plugins/`
+folder in the cloud storage bucket.
+
+![](images/composer-install.png)
+
 ## Operators
 
 ### FacultyJobRunNowOperator
