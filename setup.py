@@ -11,7 +11,7 @@ setup(
     packages=find_packages(),
     use_scm_version={"version_scheme": "post-release"},
     setup_requires=["setuptools_scm"],
-    install_requires=["faculty"],
+    install_requires=["pytz", "requests"],
     entry_points={
         'airflow.plugins': [
             'unused = airflow_faculty_plugin:FacultyPlugin'
