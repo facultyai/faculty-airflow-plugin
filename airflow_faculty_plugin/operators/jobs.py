@@ -1,5 +1,6 @@
 import os
 import time
+import uuid
 
 from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator
@@ -21,8 +22,8 @@ class FacultyJobRunNowOperator(BaseOperator):
 
     Parameters
     ----------
-    job_id : str
-        ID of the job to trigger
+    job_id_or_name : str
+        ID or name of the job to trigger
     project_id : str
         Project ID of the job to trigger
     polling_period_seconds : int, optional
@@ -48,7 +49,7 @@ class FacultyJobRunNowOperator(BaseOperator):
 
     def __init__(
         self,
-        job_id,
+        job_id_or_name,
         job_parameter_values=None,
         polling_period_seconds=30,
         project_id=None,
@@ -56,7 +57,6 @@ class FacultyJobRunNowOperator(BaseOperator):
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.job_id = job_id
 
         if job_parameter_values is not None:
             self.job_parameter_values = job_parameter_values
@@ -74,6 +74,27 @@ class FacultyJobRunNowOperator(BaseOperator):
             self.client_configuration = client_configuration
         else:
             self.client_configuration = {}
+
+        self.job_id = self._resolve_job_id(job_id_or_name)
+
+    def _resolve_job_id(self, job_id_or_name):
+        """ Resolve job ID from name """
+        try:
+            job_id = uuid.UUID(job_id_or_name)
+            return job_id
+        except ValueError:
+            pass
+
+        job_client = client("job", **self.client_configuration)
+        job_names = job_client.list_names(self.project_id)
+        job_ids = {v: k for k, v in job_names.items()}
+
+        try:
+            job_id = job_ids[job_id_or_name]
+        except KeyError:
+            raise ValueError(f"Job name {job_id_or_name} not found")
+
+        return job_id
 
     def execute(self, context):
         """

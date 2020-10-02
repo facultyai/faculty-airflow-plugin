@@ -109,3 +109,25 @@ class JobClient(BaseClient):
         response = self._get_raw(endpoint)
         state_raw = response.json()["state"]
         return RunState(state_raw)
+
+    def list_names(self, project_id):
+        """List the job names in a project.
+
+        Parameters
+        ----------
+        project_id : uuid.UUID
+            The ID of the project to list jobs in.
+
+        Returns
+        -------
+        Dict[str, UUID]
+            Dictionary of job ID to job name.
+        """
+        endpoint = "/project/{}/job".format(project_id)
+        response = self._get_raw(endpoint).json()
+
+        job_names = {
+            summary["jobId"]: summary["meta"]["name"] for summary in response
+        }
+
+        return job_names
