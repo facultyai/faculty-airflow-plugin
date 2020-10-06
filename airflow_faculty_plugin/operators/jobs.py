@@ -4,6 +4,7 @@ import uuid
 
 from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator
+from airflow.utils.decorators import apply_defaults
 
 from ..faculty import client
 from ..faculty.clients.job import RunState
@@ -32,7 +33,8 @@ class FacultyJobRunNowOperator(BaseOperator):
         quickly, and a high number if the job is longer. Defaults to
         30s.
     job_parameter_values : dict, optional
-        Dictionary mapping parameter names to the values they should take
+        Dictionary mapping parameter names to the values they should take.
+        (templated)
     task_id : str
         Identifier for the Airflow task triggered by this job
     client_configuration : dict, optional
@@ -44,9 +46,12 @@ class FacultyJobRunNowOperator(BaseOperator):
         Reference to the DAG that owns this task.
     """
 
+    template_fields = ["job_parameter_values"]
+
     ui_color = "#00aef9"
     ui_fgcolor = "#fff"
 
+    @apply_defaults
     def __init__(
         self,
         job_id_or_name,
